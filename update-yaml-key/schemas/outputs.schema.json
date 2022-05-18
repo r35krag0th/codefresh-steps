@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StepOutputs",
+  "type": "object",
+  "additionalProperties": false,
+  "patterns": [],
+  "required": ["CURRENT_VALUE", "UPDATED_VALUE"],
+  "properties": {
+    "CURRENT_VALUE": {
+      "type": "string",
+      "description": "The current value prior to updating"
+    },
+    "UPDATED_VALUE": {
+      "type": "string",
+      "description": "The updated value after updating"
+    }
+  },
+  "definitions": {}
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StepInputs",
+  "type": "object",
+  "additionalProperties": false,
+  "patterns": [],
+  "required": ["VALUES_FILE", "YAML_KEY", "NEW_VALUE"],
+  "properties": {
+    "VALUES_FILE": {
+      "type": "string",
+      "description": "Target values file to update"
+    },
+    "YAML_KEY": {
+      "type": "string",
+      "description": "The YAML Key to update"
+    },
+    "NEW_VALUE": {
+      "type": "string",
+      "description": "The new value of the YAML Key"
+    },
+    "working_directory": {
+      "type": "string",
+      "description": "Working directory to run commands from",
+      "default": "."
+    }
+  },
+  "definitions": {}
+}

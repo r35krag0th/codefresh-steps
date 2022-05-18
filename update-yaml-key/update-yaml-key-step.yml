@@ -1,0 +1,104 @@
+version: '1.0'
+kind: step-type
+metadata:
+  name: r35/update_yaml_key
+  version: 1.0.0
+  title: Update a YAML Key
+  isPublic: false
+  description: Updates the specified key in a YAML file.
+  sources:
+    - 'https://github.com/r35krag0th/codefresh-steps/tree/main/update-yaml-key'
+  stage: incubating
+  maintainers:
+    - name: Bob Saska
+  categories:
+    - featured
+  official: false
+  tags: []
+  icon:
+    type: svg
+    url: 'https://cdn.jsdelivr.net/gh/codefresh-contrib/cfstep-helmfile/helm-logo.svg'
+    background: "#f4f4f4"
+  examples:
+    - description: "Update image tag"
+      workflow:
+        update_chart_tag:
+          title: Update Image Tag for Chart
+          type: r35/update_yaml_key
+          arguments:
+            VALUES_FILE: '${{VALUES_FILE}}'
+            YAML_KEY: '${{YAML_KEY}}'
+            NEW_VALUE: '${{NEW_VALUE}}'
+            working_directory: '${{CHARTS_DIR}}'
+spec:
+  arguments: |-
+    {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "StepInputs",
+      "type": "object",
+      "additionalProperties": false,
+      "patterns": [],
+      "required": [
+        "VALUES_FILE",
+        "YAML_KEY",
+        "NEW_VALUE"
+      ],
+      "properties": {
+        "VALUES_FILE": {
+          "type": "string",
+          "description": "Target values file to update"
+        },
+        "YAML_KEY": {
+          "type": "string",
+          "description": "The YAML Key to update"
+        },
+        "NEW_VALUE": {
+          "type": "string",
+          "description": "The new value of the YAML Key"
+        },
+        "working_directory": {
+          "type": "string",
+          "description": "Working directory to run commands from",
+          "default": "."
+        }
+      },
+      "definitions": {}
+    }
+  returns: |-
+    {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "StepOutputs",
+      "type": "object",
+      "additionalProperties": false,
+      "patterns": [],
+      "required": [
+        "CURRENT_VALUE",
+        "UPDATED_VALUE"
+      ],
+      "properties": {
+        "CURRENT_VALUE": {
+          "type": "string",
+          "description": "The current value prior to updating"
+        },
+        "UPDATED_VALUE": {
+          "type": "string",
+          "description": "The updated value after updating"
+        }
+      },
+      "definitions": {}
+    }
+
+  steps:
+    main:
+      name: update-yaml
+      image: mikefarah/yq
+      environment:
+        - 'VALUES_FILE=${{VALUES_FILE}}'
+        - 'YAML_KEY=${{YAML_KEY}}'
+        - 'NEW_VALUE=${{NEW_VALUE}}'
+      commands:
+        - export CURRENT_VALUE=$(yq '${{YAML_KEY}}' "${{working_directory}}/${{VALUES_FILE}}")
+        - cf_export CURRENT_VALUE
+        - yq -i '${{YAML_KEY}} = "${{NEW_VALUE}}"' "${{working_directory}}/${{VALUES_FILE}}"
+        - export UPDATED_VALUE=$(yq '${{YAML_KEY}}' "${{working_directory}}/${{VALUES_FILE}}")
+        - cf_export UPDATED_VALUE
