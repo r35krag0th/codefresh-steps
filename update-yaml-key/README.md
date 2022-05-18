@@ -11,7 +11,7 @@ In this example pipeline step I have defined the variables `DEV_VALUES_FILE`,
    and Codefresh Steps YAML.
 
 Additionally, the step will track the current value prior to updating
-via `CURRENT_VALUE`, and the value after updating via `NEW_VALUE` in
+via `CURRENT_VALUE`, and the value after updating via `UPDATED_VALUE` in
 the step outputs.
 
 This will allow you to avoid steps that aren't required when the value
